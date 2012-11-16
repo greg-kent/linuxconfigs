@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/home/kgregory/git/grids/northstar32-smoketest'
+let g:netrw_dirhist_2='/home/kgregory/.pulse'
+let g:netrw_dirhist_3='/home/kgregory/git/grids/gdl/orion-sles11-smoketest'
+let g:netrw_dirhist_4='/home/kgregory/git/storagegrid/ntp-monitor'
+let g:netrw_dirhist_5='/home/kgregory/git/storagegrid/bycast-users/build'
+let g:netrw_dirhist_6='/home/kgregory/git/storagegrid/cdk'
+let g:netrw_dirhist_7='/home/kgregory/git/storagegrid/runit'
+let g:netrw_dirhist_8='/home/kgregory/git/storagegrid/mi'

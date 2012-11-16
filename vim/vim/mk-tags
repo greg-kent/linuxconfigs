@@ -1,0 +1,31 @@
+#!/bin/sh
+
+rm -f tags ID Session.vim
+
+ctags -R .
+which mkid && mkid -v
+
+VIM_FILE=$(pwd)/Session.vim
+
+config_in=$(find . -name config.h.in)
+if [ -z "$config_in" ]
+then
+	config_in=$(find . -name config.h)
+fi
+if [ -n "$config_in" ]
+then
+	config=$(dirname $config_in)/$(basename $config_in .in)
+	DEFINES=$(grep "#define" $config | cut -d' ' -f2)
+
+	echo -n "defined=" > .defines
+	for d in $DEFINES
+	do
+	  echo -n "$d," >> .defines
+	done
+fi
+
+echo "" > $VIM_FILE
+echo "let LID_File = \"$(pwd)/ID\"" >> $VIM_FILE
+echo "set tags=$(pwd)/tags" >> $VIM_FILE
+echo "" >> $VIM_FILE
+

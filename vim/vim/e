@@ -1,0 +1,38 @@
+#!/bin/sh
+
+SEARCH_DIR=.
+
+for f in $@
+do
+    if [ -e $f ]
+    then
+        FILES="$FILES $f"
+    else
+        fn=${f##*/}
+        echo $f | grep "\.c:" >/dev/null
+        if [ $? -eq 0 ]
+        then
+            # only valid for one file
+            FN=$(echo $f | cut -d: -f1)
+            LN=$(echo $f | cut -d: -f2)
+            echo got it $FN:$LN
+			if [ -e $FN ]
+			then
+				FILES="+$LN $FN"
+			else
+				FILES="+$LN $(find $SEARCH_DIR -name ${FN##*/})"
+			fi
+		else
+			FILES="$FILES $(find $SEARCH_DIR -name $fn)"
+		fi
+	fi
+done
+
+if [ -f Session.vim ]
+then
+	echo loading Session.vim
+	gvim --remote-silent "+source Session.vim" $FILES
+else
+	gvim --remote-silent $FILES
+fi
+
