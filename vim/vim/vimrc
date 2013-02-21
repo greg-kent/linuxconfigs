@@ -106,8 +106,14 @@ vmap  <F9>  y :cs find c <C-R>"<CR>
 vmap  <F10>  y :cs find s <C-R>"<CR>
 vmap  <F12>  y :cs find e <C-R>"<CR>
 
+vmap  <F4> <Esc>`<O#if 0<Esc>`>o#endif /* 0 */<Esc>
+
 imap <F2> OSL_Printf("%s(%d): %s\n", __FUNCTION__, __LINE__, );
 
+
+" Whitespace and tab matching
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s+$\|\t/
 
 "let Tlist_File_Fold_Auto_Close = 1
 
@@ -174,7 +180,7 @@ nnoremap <silent> \w :WMToggle<CR>
 nnoremap <silent> \n :NERDTreeToggle<CR>
 
 " FuzzyFinder (http://www.vim.org/scripts/script.php?script_id=1984)
-"nnoremap <silent> \b :FufBuffer<CR>
+nnoremap <silent> \b :FufBuffer<CR>
 nnoremap <silent> \f :FufFile<CR>
-"nnoremap <silent> \t :FufTag<CR>
+nnoremap <silent> \t :FufTag<CR>
 
