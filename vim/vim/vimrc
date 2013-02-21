@@ -106,7 +106,7 @@ vmap  <F9>  y :cs find c <C-R>"<CR>
 vmap  <F10>  y :cs find s <C-R>"<CR>
 vmap  <F12>  y :cs find e <C-R>"<CR>
 
-vmap  <F4> <Esc>`<O#if 0<Esc>`>o#endif /* 0 */<Esc>
+vmap  <F4> <Esc>`<O<Esc>0<Esc>i#if 0<Esc>`>o#endif /* 0 */<Esc>
 
 imap <F2> OSL_Printf("%s(%d): %s\n", __FUNCTION__, __LINE__, );
 
