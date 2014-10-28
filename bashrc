@@ -125,6 +125,8 @@ fi
 
 # ------------------------------------------------------------------
 # My Stuff
+export EDITOR='vim'
+source ~/bin/tmuxinator.bash
 
 #color manpages
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -168,23 +170,17 @@ function sgrep {
 
 function cpiso {
   if [ -z "$1" ]; then
-    version="9.1.0"
+    version="10.0.0"
   else
     version="$1"
   fi
-  sp=`echo $version | cut -d'.' -f3`
-  suffix=""
-  if [ $sp -ne 0 ]; then
-    suffix="Service_Pack_"
-  fi
-  
-  rm /mainfile/kgregory/iso/*StorageGRID_"$version"*
-  cp -v "$version"/Bycast_StorageGRID*iso /mainfile/kgregory/iso
-  cp -v "$version"/Enablement_Layer_for_StorageGRID_"$version"_Software_"$suffix"2*iso /mainfile/kgregory/iso
+
+  rm /mainfile/home/kgregory/iso/*StorageGRID_"$version"*
+  cp -v "$version"/NetApp_StorageGRID*iso /mainfile/home/kgregory/iso
 }
 
 function build {
-  for mod in $@ ; do 
+  for mod in $@ ; do
     cb -b ~/git/storagegrid/${mod} --force-rebuild
     rc=$?
     if [ $rc -eq 1 ] || [ $rc -eq 3 ] ;  then
@@ -195,7 +191,7 @@ function build {
 }
 
 function buildn {
-  for mod in $@ ; do 
+  for mod in $@ ; do
     cb -b ~/git/northstar2/storagegrid/${mod} --force-rebuild
     rc=$?
     if [ $rc -eq 1 ] || [ $rc -eq 3 ] ;  then
@@ -207,16 +203,16 @@ function buildn {
 
 
 function cb {
-  sudo -H component-build -f ~/build/repo -o ~/build --build-uncommitted-changes -t kgregory "$@"
-  sudo -H component-build -f ~/build/repo -o ~/build --build-uncommitted-changes --shared-output-dir=/mainfile/rel/build/storagegrid -t kgregory "$@"
+#  sudo -H component-build -f ~/build/repo -o ~/build --build-uncommitted-changes -t kgregory "$@"
+  sudo -H component-build -f ~/build/repo -o ~/build --build-uncommitted-changes --shared-output-dir=/mainfile/home/rel/build/storagegrid -t kgregory "$@"
   rc=$?
   send_build_message $rc "$2"
   return $rc
 }
 
 function rb {
-  sudo recipe-build -f ~/build/repo -o ~/build -t kgregory "$@"
-#  sudo recipe-build -f ~/build/repo -o ~/build --shared-output-dir=/mainfile/rel/build/storagegrid -t kgregory "$@"
+#  sudo recipe-build -f ~/build/repo -o ~/build -t kgregory "$@"
+  sudo recipe-build -f ~/build/repo -o ~/build --build-uncommitted-changes --shared-output-dir=/mainfile/home/rel/build/storagegrid -t kgregory "$@"
   rc=$?
   send_build_message $rc "$2"
   return $rc
@@ -255,3 +251,6 @@ function DIRS_f() {
 export P4PORT=perforce.vtc.eng.netapp.com:1666
 export P4USER=rel
 
+function xml_replace {
+    find . -name "*.xml" -exec sed -i "s/$1/$2/g" '{}' \;
+}

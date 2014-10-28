@@ -1,10 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =8
-let g:netrw_dirhist_1='/home/kgregory/git/grids/northstar32-smoketest'
-let g:netrw_dirhist_2='/home/kgregory/.pulse'
-let g:netrw_dirhist_3='/home/kgregory/git/grids/gdl/orion-sles11-smoketest'
-let g:netrw_dirhist_4='/home/kgregory/git/storagegrid/ntp-monitor'
-let g:netrw_dirhist_5='/home/kgregory/git/storagegrid/bycast-users/build'
-let g:netrw_dirhist_6='/home/kgregory/git/storagegrid/cdk'
-let g:netrw_dirhist_7='/home/kgregory/git/storagegrid/runit'
-let g:netrw_dirhist_8='/home/kgregory/git/storagegrid/mi'
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/kgregory/git/buildroot/output/build/openvmtools-9.2.2-893683/config'
+let g:netrw_dirhist_2='/home/kgregory/git/shell-message-notifier'
+let g:netrw_dirhist_3='/home/kgregory/.local/share/gnome-shell/extensions/message-notifier@shell-extensions.barisione.org'
+let g:netrw_dirhist_4='/home/kgregory/git/install-grid/install-grid/build/sles10sp3-64bit'
+let g:netrw_dirhist_5='/home/kgregory/git/buildroot/buildroot/build/common/lib/bycast/tasks/build/basic'
