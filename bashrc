@@ -65,7 +65,8 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1="${debian_chroot:+($debian_chroot)}${GREEN}\u${CYAN}@${BLUE}\h:${CYAN}\w${GRAY} $ "
+  
+  PS1="${debian_chroot:+($debian_chroot)}${GREEN}\u${CYAN}@${BLUE}\h:${BLUE}\w${CYAN}$(declare -F __git_ps1 &>/dev/null && __git_ps1 "(%s)")${GRAY} $ "
 #    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
@@ -126,7 +127,9 @@ fi
 # ------------------------------------------------------------------
 # My Stuff
 export EDITOR='vim'
-source ~/bin/tmuxinator.bash
+if [ -e ~/bin/tmuxinator.bash ]; then
+  source ~/bin/tmuxinator.bash
+fi
 
 #color manpages
 export LESS_TERMCAP_mb=$'\E[01;31m'
@@ -140,18 +143,8 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # enable **
 shopt -s globstar
 
-#build
-#success_message="Build finished sucessfully"
-#success_icon="/usr/share/icons/Humanity/actions/48/gtk-ok.svg"
-#fail_message="Build Failed"
-#fail_icon="/usr/share/icons/Humanity/actions/48/gtk-cancel.svg"
-#alias send_build_message_success='notify-send "${success_message}" -i "${success_icon}"'
-#alias send_build_message_fail='notify-send "${fail_message}" -i "${fail_icon}"'
-
 alias ff='find -type f'
 alias fixedin='echo $(date -u -d"$(git log -1 --pretty=%ci)" +%Y%m%d.%H%M).$(git log -1 --pretty=%h)'
-#alias cb='sudo component-build -f ~/build/repo -o ~/build -t kgregory --on-pass=send_build_message_success --on-fail=send_build_message_fail'
-#alias rb='sudo recipe-build -f ~/build/repo -o ~/build -t kgregory --on-pass=send_build_message_success --on-fail=send_build_message_fail'
 
 #cdpath and find/grep
 export CDPATH=.:~:
@@ -164,93 +157,10 @@ function gr {
   grep -Ri "$1" *;
 }
 
-function sgrep {
-  grep -RIisn --exclude=tags --exclude="*~" --exclude-dir="mydiff" --exclude-dir=".deps" --exclude-dir="concordance-lite/src/spec/data/bycast/software/release" --exclude=cscope.out "$1" *;
-}
-
-function cpiso {
-  if [ -z "$1" ]; then
-    version="10.0.0"
-  else
-    version="$1"
-  fi
-
-  rm /mainfile/home/kgregory/iso/*StorageGRID_"$version"*
-  cp -v "$version"/NetApp_StorageGRID*iso /mainfile/home/kgregory/iso
-}
-
-function build {
-  for mod in $@ ; do
-    cb -b ~/git/storagegrid/${mod} --force-rebuild
-    rc=$?
-    if [ $rc -eq 1 ] || [ $rc -eq 3 ] ;  then
-      return
-    fi
-  done
-  rb -b ~/git/storagegrid --build-uncommitted-changes
-}
-
-function buildn {
-  for mod in $@ ; do
-    cb -b ~/git/northstar2/storagegrid/${mod} --force-rebuild
-    rc=$?
-    if [ $rc -eq 1 ] || [ $rc -eq 3 ] ;  then
-      return
-    fi
-  done
-  rb -b ~/git/northstar2/storagegrid --build-uncommitted-changes
-}
-
-
-function cb {
-#  sudo -H component-build -f ~/build/repo -o ~/build --build-uncommitted-changes -t kgregory "$@"
-  sudo -H component-build -f ~/build/repo -o ~/build --build-uncommitted-changes --shared-output-dir=/mainfile/home/rel/build/storagegrid -t kgregory "$@"
-  rc=$?
-  send_build_message $rc "$2"
-  return $rc
-}
-
-function rb {
-#  sudo recipe-build -f ~/build/repo -o ~/build -t kgregory "$@"
-  sudo recipe-build -f ~/build/repo -o ~/build --build-uncommitted-changes --shared-output-dir=/mainfile/home/rel/build/storagegrid -t kgregory "$@"
-  rc=$?
-  send_build_message $rc "$2"
-  return $rc
-}
-
-
-function send_build_message {
-  local build_result=$1
-  case "$build_result" in
-    0|2)
-      local message="Build finished sucessfully"
-      local icon="/usr/share/icons/Humanity/actions/48/gtk-ok.svg"
-      ;;
-    1)
-      local message="Build Failed"
-      local icon="/usr/share/icons/Humanity/actions/48/gtk-cancel.svg"
-      ;;
-    3)
-      local message="Build arguement error"
-      local icon="/usr/share/icons/Humanity/actions/48/gtk-cancel.svg"
-      ;;
-    *)
-      local message="Build finished"
-      ;;
-  esac
-
-  notify-send "$message" "Component $2" -i "$icon"
-}
-
-
 function DIRS_f() {
  echo $@
 }
 
-# P4 stuff
-export P4PORT=perforce.vtc.eng.netapp.com:1666
-export P4USER=rel
-
-function xml_replace {
-    find . -name "*.xml" -exec sed -i "s/$1/$2/g" '{}' \;
-}
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/Code/go
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
